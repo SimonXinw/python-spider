@@ -2,19 +2,22 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-import get_images
-from download_images import save_images
+from spiders.download_images import save_images
+from spiders.get_images import get_product_image_links
+from config import SAVE_DIR_PATH, PAGE_URL
 
 
-class MyWebScraper:
-    def __init__(self, search_term, base_url):
+class WebScraper:
+    def __init__(self, search_term, base_url, save_dir_path):
         self.base_url = base_url
 
         self.search_term = search_term
 
+        self.save_dir_path = save_dir_path
+
         driver_options = webdriver.ChromeOptions()  # 谷歌选项
 
-    # 设置为开发者模式，避免被识别
+        # 设置为开发者模式，避免被识别
         driver_options.add_experimental_option('excludeSwitches',
                                                ['enable-automation'])
 
@@ -22,15 +25,15 @@ class MyWebScraper:
 
         self.wait = WebDriverWait(self.driver, 2)
 
-    def scrape(self):
+    def crawling(self):
         self.driver.get(self.base_url)
 
-    #  获取输入框 dom 节点
+        #  获取输入框 dom 节点
         input_edit = self.driver.find_element(By.CSS_SELECTOR, '#key')
 
         input_edit.clear()
 
-    #  搜索商品
+        #  搜索商品
         input_edit.send_keys(self.search_term)
 
         search_button = self.driver.find_element(
@@ -47,15 +50,18 @@ class MyWebScraper:
 
         current_page_url = self.driver.current_url
 
-        image_links = get_images.get_product_image_links(current_page_url)
+        # 根据 url 请求回来图片链接
+        image_links = get_product_image_links(current_page_url)
 
-        save_images(image_links)
+        # 保存图片
+        save_images(image_links, self.save_dir_path)
 
         self.driver.quit()
 
 
-# 示例使用
-search_term = '裤子'
-base_url = 'https://www.jd.com/'  # 这里替换为你要访问的 URL
-scraper = MyWebScraper(search_term, base_url)
-scraper.scrape()
+# 输入搜索商品
+search_term = input("请输入需要搜索的商品名称: ") or '连衣裙'
+
+scraper = WebScraper(search_term, PAGE_URL, SAVE_DIR_PATH)
+
+scraper.crawling()

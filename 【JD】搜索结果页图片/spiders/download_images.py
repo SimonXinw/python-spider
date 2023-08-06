@@ -1,13 +1,6 @@
 # 引入模块
-import get_images
 import os
 import requests
-
-# 请求的网址 URL
-page_url = "https://search.jd.com/Search?keyword=%E8%BF%9E%E8%A1%A3%E8%A3%99"
-
-# Folder where you want to save the images
-save_dir_path = "/Users/xinwang/Desktop/京东项目/output_images"
 
 
 def download_image(image_url, save_path):
@@ -27,23 +20,19 @@ def download_image(image_url, save_path):
         print(f"Failed to download the image: {image_url}")
 
 
-# Check if the folder exists, if not, create it
-if not os.path.exists(save_dir_path):
-    os.makedirs(save_dir_path)
-
-# 请求图片链接
-# image_links = get_images.get_product_image_links(page_url)
-
-
-def save_images(image_links):
+def save_images(image_links, SAVE_DIR_PATH):
     if not image_links:
         print('下载文件失败>>>>>>>>>>>>>>>：空数组')
     else:
+        # 检查文件夹是否存在，如果不存在，请创建它
+        if not os.path.exists(SAVE_DIR_PATH):
+            os.makedirs(SAVE_DIR_PATH)
+
         for image_url in image_links:
-            # Extract the filename from the URL
+            # 从URL中提取文件名
             filename = image_url.split("/")[-1]
 
-        # Set the path to save the image
-            save_file_path = os.path.join(save_dir_path, filename)
+            # 设置保存图像的路径
+            save_file_path = os.path.join(SAVE_DIR_PATH, filename)
 
             download_image(image_url, save_file_path)
