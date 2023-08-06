@@ -25,7 +25,7 @@ class WebScraper:
         while len(detail_page_urls) < self.download_number:
             page_no = page_no + 1
 
-            page_url = f'http://www.netbian.com/e/search/result/index.php?page=${page_no}&searchid=54'
+            page_url = f'http://www.netbian.com/e/search/result/index.php?page=${page_no}&searchid=1266'
 
             res_image_urls = get_detail_urls.get_urls(
                 page_url, self.download_number)
