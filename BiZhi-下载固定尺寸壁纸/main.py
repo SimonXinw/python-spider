@@ -4,9 +4,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from urllib.parse import urlparse, parse_qs
 from config import SAVE_DIR_PATH, PAGE_URL, DOWNLOAD_IMAGE_NUMBER
-import get_detail_urls
-import download_images
-import get_image_urls
+from spider import get_detail_urls
+from spider import download_images
+from spider import get_image_urls
 
 
 class WebScraper:
@@ -44,7 +44,10 @@ class WebScraper:
         if not image_urls:
             return print('抓取失败: >>>>>>>>>> image_url 为空')
 
-        download_images.save_images(image_urls, self.save_dir_path)
+        success_num = download_images.save_images(
+            image_urls, self.save_dir_path)
+
+        print(f'下载成功，总数: {success_num}')
 
 
 scraper = WebScraper(PAGE_URL,

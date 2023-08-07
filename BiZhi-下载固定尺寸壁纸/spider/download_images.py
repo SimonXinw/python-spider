@@ -1,9 +1,10 @@
 # 引入模块
 import os
 import requests
+from utils import common
 
 
-def download_image(image_url, save_path):
+def download_image(image_url, save_path, index):
     #  兼容 // url 代码
 
     if image_url.startswith('//'):
@@ -11,13 +12,15 @@ def download_image(image_url, save_path):
 
     response = requests.get(image_url)
 
-    if response.status_code == 200:
-        with open(save_path, 'wb') as file:
-            file.write(response.content)
+    #  失败直接拒绝
+    if response.status_code != 200:
+        print(f"失败{index + 1} - 图片\文件路径: >>> {image_url}")
+        return None
 
-        print(f"下载 - 图片文件路径：>>> {save_path}")
-    else:
-        print(f"Failed to download the image: {image_url}")
+    with open(save_path, 'wb') as file:
+        file.write(response.content)
+
+    print(f"下载{index + 1} - 图片文件路径：>>> {save_path}")
 
 
 def save_images(image_links, SAVE_DIR_PATH):
@@ -28,11 +31,16 @@ def save_images(image_links, SAVE_DIR_PATH):
         if not os.path.exists(SAVE_DIR_PATH):
             os.makedirs(SAVE_DIR_PATH)
 
-        for image_url in image_links:
+        for index, image_url in enumerate(image_links):
             # 从URL中提取文件名
             filename = image_url.split("/")[-1]
 
             # 设置保存图像的路径
             save_file_path = os.path.join(SAVE_DIR_PATH, filename)
 
-            download_image(image_url, save_file_path)
+            download_image(image_url, save_file_path, index)
+
+        # 判断下载了多少张图片
+        success_num = common.get_images(SAVE_DIR_PATH)
+
+        return success_num
