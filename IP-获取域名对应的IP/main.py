@@ -7,7 +7,7 @@ class QueryIp:
     def __init__(self) -> None:
         pass
 
-    def output_hosts():
+    def output_hosts(self):
         domains = DOMAINS
 
         # 获取当前文件夹的绝对路径
@@ -35,4 +35,5 @@ class QueryIp:
 
 if __name__ == '__main__':
     query = QueryIp()
+
     query.output_hosts()

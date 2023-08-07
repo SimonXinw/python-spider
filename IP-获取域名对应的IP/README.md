@@ -13,14 +13,14 @@
 安装依赖包
 
 ```bash
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 如果是自己开发的话，开发完毕了之后需要更新一下依赖包
 
 ```bash
 # 安装
-pip3 install pipreqs
+pip install pipreqs
 # 在当前目录生成
 pipreqs . --encoding=utf8 --force
 ```
@@ -30,25 +30,5 @@ pipreqs . --encoding=utf8 --force
 ## 安装 selenium 环境
 
 安装好需要的包之后，还需要配置对应的 chromedriver 环境，查找到自己 chrome 浏览器的版本之后，用这个网址下载 https://chromedriver.chromium.org/downloads
-
-mac
-
-```bash
-# 移动
-sudo mv 你的文件路径 /usr/local/bin/=
-
-# 检测
-chromedriver --version
-```
-
-window
-
-```bash
-# 移动
-move 你的文件路径 C:\Windows\chromedriver.exe
-
-# 检测
-chromedriver --version
-```
 
 # 代码 Debugger ，可以使用 vscode 的左边的三角形爬虫用来调试代码，事半功倍

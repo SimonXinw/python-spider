@@ -3,7 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensions 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
+# 仓库的 token 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
+
+# C extensions 
 *.so
 
 # Distribution / packaging
