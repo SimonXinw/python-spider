@@ -2,20 +2,25 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def get_product_image_links(url):
+def get_product_image_links(html_content):
+    if html_content:
+        print('html 内容存在')
+    else:
+        return None
+
     try:
         headers = {
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
         }
         # 1. 发送 GET 请求获取网页内容
-        response = requests.get(url, headers=headers)
+        # response = requests.get(url, headers=headers)
 
         # 2.检查请求是否成功
-        if (response.status_code != 200):
-            return print(f'请求失败，code:{response.status_code}')
+        # if (response.status_code != 200):
+        # return print(f'请求失败，code:{response.status_code}')
 
         # 3. 使用 BeautifulSoup 解析 HTML
-        soup = BeautifulSoup(response.text, 'html.parser')
+        soup = BeautifulSoup(html_content, 'html.parser')
 
         # 4. 使用 soup 实例对象直接查找商品列表元素
         product_list_father = soup.find('div', {'id': 'J_goodsList'})

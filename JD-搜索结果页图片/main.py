@@ -46,12 +46,18 @@ class WebScraper:
         wait = WebDriverWait(self.driver, 10)
 
         # 使用显式等待等待特定条件满足后再继续执行后续操作
-        wait.until(EC.url_contains("search"))
+        # wait.until(EC.url_contains("search"))
 
-        current_page_url = self.driver.current_url
+        # 等待页面上的某个元素加载成功（示例使用 XPath 来定位元素）
+        wait.until(EC.presence_of_element_located(
+            (By.XPATH, "//*[@class='sl-v-logos']")))
+
+        # current_page_url = self.driver.current_url
+
+        html_content = self.driver.page_source
 
         # 根据 url 请求回来图片链接
-        image_links = get_product_image_links(current_page_url)
+        image_links = get_product_image_links(html_content)
 
         # 保存图片
         save_images(image_links, self.save_dir_path)
