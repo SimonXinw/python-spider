@@ -38,14 +38,13 @@ def copy_arrange_data():
 
     #  传入一个 工作表实例对象，和列数据格式：[1,2,3]， 给工作表中增加一个列
 
-    def add_column_to_sheet(sheet, column_data):
+    def add_column_to_sheet(sheet, column_data, column_index):
         # 在每一行的第 max_column + 1 列插入对应的数据
-        for column_index, item in enumerate(format_tuple, start=1):
-            for row_num, data in enumerate(item, start=1):
-                sheet.cell(row=row_num, column=column_index, value=data)
+        for row_num, data in enumerate(column_data, start=1):
+            sheet.cell(row=row_num, column=column_index, value=data)
 
-    for column_tuple in format_tuple:
-        add_column_to_sheet(new_sheet, column_tuple)
+    for column_index, column_tuple in enumerate(format_tuple, start=1):
+        add_column_to_sheet(new_sheet, column_tuple, column_index)
 
     # 保存工作簿，包含整理后的数据
     output_file = '/Users/xinwang/Desktop/zhengsiyu/get_log_data/jk埋点.xlsx'
