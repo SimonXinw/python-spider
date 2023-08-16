@@ -6,7 +6,8 @@ import pandas as pd
 
 def copy_arrange_data():
 
-    # 读取 excel 文件
+    # 读取 excel 文件夹
+
     excel_file = '/Users/xinwang/Desktop/zhengsiyu/get_log_data/jk埋点.xlsx'
 
     wb = load_workbook(excel_file)

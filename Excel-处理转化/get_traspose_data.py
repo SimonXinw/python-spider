@@ -1,7 +1,8 @@
 from openpyxl import load_workbook
+import os
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
-import pandas as pd
+from config import SOURCE_DIR_PATH, SAVE_DIR_PATH
 
 
 def get_traspose_data():
