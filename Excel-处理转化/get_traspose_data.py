@@ -2,18 +2,29 @@ from openpyxl import load_workbook
 import os
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
-from config import SOURCE_DIR_PATH, SAVE_DIR_PATH
+from config import SOURCE_DIR_PATH, SAVE_DIR_PATH, NEW_SHEET_TITLE
+import pandas as pd
+from utils import common
 
 
 def get_traspose_data():
 
-    # 读取 excel 文件
-    excel_file = '/Users/xinwang/Desktop/zhengsiyu/get_log_data/jk埋点.xlsx'
+    utiles_instance = common.Utils()
 
-    wb = load_workbook(excel_file)
+    file_name = utiles_instance.get_first_filename(SOURCE_DIR_PATH)
+
+    # excel 文件绝对路径 path
+    source_file_path = os.path.abspath(
+        os.path.join(SOURCE_DIR_PATH, file_name))
+
+    # excel 文件绝对路径 path
+    save_file_path = os.path.abspath(
+        os.path.join(SAVE_DIR_PATH, file_name))
+
+    wb = load_workbook(source_file_path)
 
     # 创建一个名为“埋点用例”的新工作表
-    new_sheet = wb.create_sheet(title='埋点用例')
+    new_sheet = wb.create_sheet(title=NEW_SHEET_TITLE)
 
     # 获取所有工作表的名称
     sheet_names = wb.sheetnames
@@ -35,14 +46,30 @@ def get_traspose_data():
     # min_col：起始列数
     # max_col：结束列数
 
-    selected_data = []
+    # 第一行
+    first_row_data = []
+
+    for row in selected_sheet.iter_rows(min_row=start_row, max_row=start_row, values_only=True):
+        first_row_data = row
+
+    # 剩余行
+    remain_rows_list = []
 
     for row in selected_sheet.iter_rows(min_row=start_row, max_row=end_row, min_col=start_column,
                                         max_col=end_column, values_only=True):
-        selected_data.append(row)
+        remain_rows_list.append(row)
+
+    #  格式化全部行
+    all_rows_list = []
+
+    for column in remain_rows_list:
+        all_rows_list.append(first_row_data)
+
+        all_rows_list.append(column)
 
     # 将数据转换为DataFrame并进行转置
-    df = pd.DataFrame(selected_data)
+    df = pd.DataFrame(all_rows_list)
+
     transposed_df = df.transpose()
 
     # 将转置后的数据粘贴到新的工作表中
@@ -50,8 +77,7 @@ def get_traspose_data():
         new_sheet.append(row)
 
     # 保存工作簿
-    output_file = "/Users/xinwang/Desktop/zhengsiyu/get_log_data/jk埋点.xlsx"  # 替换为您的输出Excel文件路径
-    wb.save(output_file)
+    wb.save(save_file_path)
 
     return
 

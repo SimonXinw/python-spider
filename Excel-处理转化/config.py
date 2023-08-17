@@ -10,3 +10,5 @@ SAVE_DIR_PATH = os.path.abspath(os.path.join(
 # 获取当前文件夹同级的 pending_files 文件夹的绝对路径
 SOURCE_DIR_PATH = os.path.abspath(os.path.join(
     current_folder, 'Excel-处理转化', 'pending_files'))
+
+NEW_SHEET_TITLE = '埋点用例'
