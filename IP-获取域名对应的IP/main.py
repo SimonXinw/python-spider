@@ -23,7 +23,8 @@ class QueryIp:
             for domain in domains:
                 ip = socket.gethostbyname(domain)
 
-                print('Querying ip for domain %s' % domain + ':' + ip)
+                print('Querying ip for domain >>>>>>>: %s' %
+                      domain + ' : ' + ip)
 
                 f.write('%s %s\n' % (ip, domain))
 
