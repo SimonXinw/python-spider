@@ -43,4 +43,6 @@
 
 20.205.243.168 api.github.com
 
+199.96.62.21 github.global.ssl.fastly.net
+
 # GitHub End 
