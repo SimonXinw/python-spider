@@ -69,7 +69,7 @@ if __name__ == '__main__':
         'xw1294600058', 'xinwang1997', '952057')  # 用户中心>>软件ID 生成一个替换 96001
     im = open(file_abs_path, 'rb').read()  # 本地图片文件路径 来替换 a.jpg 有时WIN系统须要//
 
-    res_str = chaojiying.PostPic(im, 9004)
+    res_str = chaojiying.PostPic(im, 2002)
 
     # 1902 验证码类型  官方网站>>价格体系 3.4+版 print 后要加()
 
