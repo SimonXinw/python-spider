@@ -1,4 +1,4 @@
-# 带带大师兄使用问题
+# 1. 带带大师兄使用问题
 
 module 'PIL.Image' has no attribute 'ANTIALIAS' 问题处理
 
@@ -27,3 +27,7 @@ image = image.resize((int(image.size[0] \* (64 / image.size[1])), 64), Image.LAN
 
 pip uninstall -y Pillowpip install Pillow==9.5.0
 两种方案都亲测可用
+
+# 2. 超级鹰
+
+https://www.chaojiying.com/api-5.html
