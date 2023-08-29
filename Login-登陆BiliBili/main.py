@@ -4,9 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from config import USER, PAGE_URL, PASSWORD, ORDER_IMG_NAME,  CODE_IMG_NAME
 from utils.common import Utils
-from image_loaded import ImageLoaded
 from config import img_dir_path
-import os
 import time
 
 
