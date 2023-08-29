@@ -20,5 +20,5 @@ DOMAINS = ['github.com',
            'codeload.github.com',
            'favicons.githubusercontent.com',
            'api.github.com',
-           'github.global.ssl.fastly.net'
+           'github.global.ssl.fastly.net',
            ]
