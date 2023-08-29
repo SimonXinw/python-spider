@@ -22,7 +22,7 @@ class WebOperator:
 
         # 设置 User-Agent 头
         driver_options.add_argument(
-            'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36')
+            'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/533.00 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36')
 
         # 设置为开发者模式，避免被识别
         driver_options.add_experimental_option('excludeSwitches',
@@ -93,7 +93,7 @@ class WebOperator:
 
         code_img_screenshot = code_img_ele.screenshot_as_png
 
-        utils_instance.save_images(code_img_screenshot, img_dir_path)
+        utils_instance.save_images(code_img_screenshot,  img_dir_path)
 
         self.driver.quit()
 
