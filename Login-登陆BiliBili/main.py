@@ -87,13 +87,13 @@ class WebOperator:
 
         #  这里要改
         text_order_ele = code_img_ele = geetest_widget_ele.find_element(
-            By.CSS_SELECTOR, '.geetest_item_img')
+            By.CSS_SELECTOR, '.geetest_tip_img')
 
         code_img_ele = geetest_widget_ele.find_element(
-            By.CSS_SELECTOR, '.geetest_item_img')
+            By.CSS_SELECTOR, '.geetest_item_wrap')
 
         ok_btn = geetest_widget_ele.find_element(
-            By.CSS_SELECTOR, '.geetest_item_img')
+            By.CSS_SELECTOR, '.geetest_commit')
 
         # 截取指定元素的图像
         utils_instance = Utils()
