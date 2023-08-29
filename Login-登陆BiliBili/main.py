@@ -3,6 +3,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from config import USER, PAGE_URL, PASSWORD
+from utils.common import Utils
+from image_loaded import ImageLoaded
+from config import img_dir_path
+import os
+import time
 
 
 class WebOperator:
@@ -17,7 +22,7 @@ class WebOperator:
 
         # 设置 User-Agent 头
         driver_options.add_argument(
-            'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36')
+            'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/533.00 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36')
 
         # 设置为开发者模式，避免被识别
         driver_options.add_experimental_option('excludeSwitches',
@@ -70,6 +75,38 @@ class WebOperator:
         password_ele.send_keys(self.password)
 
         login_btn_ele.click()
+
+        wait.until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, ".geetest_panel:last-child .geetest_panel_box .geetest_panel_next .geetest_widget .geetest_item_img")))
+
+        time.sleep(1)
+
+        # 使用CSS选择器找到目标元素
+        geetest_widget_ele = self.driver.find_element(
+            By.CSS_SELECTOR,  '.geetest_panel:last-child .geetest_panel_box .geetest_panel_next .geetest_widget')
+
+        #  这里要改
+        text_order_ele = code_img_ele = geetest_widget_ele.find_element(
+            By.CSS_SELECTOR, '.geetest_tip_img')
+
+        code_img_ele = geetest_widget_ele.find_element(
+            By.CSS_SELECTOR, '.geetest_item_wrap')
+
+        ok_btn = geetest_widget_ele.find_element(
+            By.CSS_SELECTOR, '.geetest_commit')
+
+        # 截取指定元素的图像
+        utils_instance = Utils()
+
+        code_img_screenshot = code_img_ele.screenshot_as_png
+
+        text_order_screenshot = text_order_ele.screenshot_as_png
+
+        utils_instance.save_images(
+            code_img_screenshot,  img_dir_path, 'code.png')
+
+        utils_instance.save_images(
+            text_order_screenshot,  img_dir_path, 'order.png')
 
         self.driver.quit()
 
