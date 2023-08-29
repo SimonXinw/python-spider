@@ -85,7 +85,14 @@ class WebOperator:
         geetest_widget_ele = self.driver.find_element(
             By.CSS_SELECTOR,  '.geetest_panel:last-child .geetest_panel_box .geetest_panel_next .geetest_widget')
 
+        #  这里要改
+        text_order_ele = code_img_ele = geetest_widget_ele.find_element(
+            By.CSS_SELECTOR, '.geetest_item_img')
+
         code_img_ele = geetest_widget_ele.find_element(
+            By.CSS_SELECTOR, '.geetest_item_img')
+
+        ok_btn = geetest_widget_ele.find_element(
             By.CSS_SELECTOR, '.geetest_item_img')
 
         # 截取指定元素的图像
@@ -93,7 +100,13 @@ class WebOperator:
 
         code_img_screenshot = code_img_ele.screenshot_as_png
 
-        utils_instance.save_images(code_img_screenshot,  img_dir_path)
+        text_order_screenshot = text_order_ele.screenshot_as_png
+
+        utils_instance.save_images(
+            code_img_screenshot,  img_dir_path, 'code.png')
+
+        utils_instance.save_images(
+            text_order_screenshot,  img_dir_path, 'order.png')
 
         self.driver.quit()
 
