@@ -28,3 +28,18 @@ class Utils:
                 continue
             else:
                 return file_name
+
+    def save_images(image_file, SAVE_DIR_PATH):
+        # 检查文件夹是否存在，如果不存在，请创建它
+        if not os.path.exists(SAVE_DIR_PATH):
+            os.makedirs(SAVE_DIR_PATH)
+
+        file_name = image_file.filename
+
+        # 设置保存图像的路径
+        save_file_path = os.path.join(SAVE_DIR_PATH, file_name)
+
+        with open(save_file_path, 'wb') as file:
+            file.write(image_file)
+
+        print(f"保存 - 图片文件路径：>>> {save_file_path}")

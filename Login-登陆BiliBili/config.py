@@ -25,6 +25,6 @@ file_abs_path = os.path.abspath(
     os.path.join(img_dir_path, file_name))
 
 # 网站 URL
-PAGE_URL = ''
+PAGE_URL = 'https://www.bilibili.com/'
 
 COOKIES = ''
