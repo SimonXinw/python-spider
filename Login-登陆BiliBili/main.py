@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from config import USER, PAGE_URL, PASSWORD
+from config import USER, PAGE_URL, PASSWORD, ORDER_IMG_NAME,  CODE_IMG_NAME
 from utils.common import Utils
 from image_loaded import ImageLoaded
 from config import img_dir_path
@@ -103,10 +103,10 @@ class WebOperator:
         text_order_screenshot = text_order_ele.screenshot_as_png
 
         utils_instance.save_images(
-            code_img_screenshot,  img_dir_path, 'code.png')
+            code_img_screenshot,  img_dir_path, CODE_IMG_NAME)
 
         utils_instance.save_images(
-            text_order_screenshot,  img_dir_path, 'order.png')
+            text_order_screenshot,  img_dir_path, ORDER_IMG_NAME)
 
         self.driver.quit()
 

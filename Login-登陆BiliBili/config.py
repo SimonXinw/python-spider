@@ -10,6 +10,10 @@ USER = 18270515107
 
 PASSWORD = 'xinwang1997'
 
+CODE_IMG_NAME = 'code.png'
+
+ORDER_IMG_NAME = 'order.png'
+
 
 # 获取当前文件夹的绝对路径
 current_folder = os.getcwd()
