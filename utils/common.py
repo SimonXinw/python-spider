@@ -1,4 +1,5 @@
 import os
+import re
 
 
 class Utils(object):
@@ -42,3 +43,23 @@ class Utils(object):
                 continue
             else:
                 return file_name
+
+    def sort_text_order(self, text_string):
+
+        text_segments = text_string.split("|")
+
+        result = []
+
+        for text_segment in text_segments:
+            text_list = text_segment.split(",")
+
+            if not re.search(r'[123456789一二三四五六七八九]+', text_list[0]):
+
+                item = {'text': text_list[0],
+                        'x': text_list[1], 'y': text_list[2]}
+
+                result.append(item)
+
+        result = sorted(result, key=lambda x: int(x['x']))
+
+        return result

@@ -63,23 +63,6 @@ class Chaojiying_Client(object):
             'http://upload.chaojiying.net/Upload/ReportError.php', data=params, headers=self.headers)
         return r.json()
 
-    def sort_text_order(self, text_string):
-        text_string = "一,12,23|泼,43,23|肉,66,16|油,19,17|123456789,34,78|一二三四五六七八九,56,89"
-
-        text_segments = text_string.split("|")
-
-        result = []
-
-        for text_segment in text_segments:
-            text_list = text_segment.split(",")
-
-            if not re.search(r'[123456789一二三四五六七八九]+', text_list[0]):
-                result.append(text_list)
-
-        result = sorted(result, key=lambda x: int(x[1]))
-
-        return result
-
 
 if __name__ == '__main__':
     chaojiying = Chaojiying_Client(
