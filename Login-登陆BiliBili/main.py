@@ -21,6 +21,8 @@ class LoginBiliBili(object):
 
         self.img_dir_path = img_dir_path
 
+        self.utils = Utils()
+
         driver_options = webdriver.ChromeOptions()  # 谷歌选项
 
         # 设置 User-Agent 头
@@ -61,7 +63,7 @@ class LoginBiliBili(object):
 
         login_btn_ele.click()
 
-    def orc_image(image_file_path):
+    def orc_image(self, image_file_path):
 
         chaojiying = Chaojiying_Client(
             'xw1294600058', 'xinwang1997', '952057')  # 用户中心>>软件ID 生成一个替换 96001
@@ -71,7 +73,9 @@ class LoginBiliBili(object):
 
         res_str = chaojiying.PostPic(im, 9501)
 
-        return res_str
+        sorted_str = self.utils.sort_text_order(res_str)
+
+        return sorted_str
 
     def screenshot_code_img(self):
         # 使用CSS选择器找到验证码容器
@@ -103,16 +107,22 @@ class LoginBiliBili(object):
 
         code_text_list = self.orc_image(code_img_abs_path)
 
-        # 点击ok_btn元素的指定位置
+        order_text_list = self.orc_image(order_img_abs_path)
+
         action = ActionChains(self.driver)
 
         action.move_to_element(code_img_ele)
 
-        action.move_by_offset(x_offset, y_offset)
+        for order_index, order_text in enumerate(order_text_list):
+            for code_text in code_text_list:
+                if (code_text['text'] == order_text['text']):
+                    # 点击ok_btn元素的指定位置
 
-        action.click()
+                    action.move_by_offset(code_text['x'], code_text['y'])
 
-        action.perform()
+                    action.click()
+
+                    action.perform()
 
     def start(self):
         self.driver.get(self.page_url)
