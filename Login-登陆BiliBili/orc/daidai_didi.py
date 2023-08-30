@@ -19,4 +19,4 @@ def orc_img(img_abs_path):
     return res
 
 
-# orc_img('/Users/xinwang/Desktop/xw/python/python-spider/Login-登陆BiliBili/verification_code/code.png')
+orc_img('/Users/xinwang/Desktop/xw/python/python-spider/Login-登陆BiliBili/verification_code/order.png')
