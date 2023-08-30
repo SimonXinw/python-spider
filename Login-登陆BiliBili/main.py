@@ -3,11 +3,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-from config import USER, PAGE_URL, PASSWORD, ORDER_IMG_NAME,  CODE_IMG_NAME
+from config import USER, PAGE_URL, PASSWORD, ORDER_IMG_NAME,  CODE_IMG_NAME, code_img_abs_path, order_img_abs_path
 from utils.common import Utils
 from config import img_dir_path
 import os
 import time
+from orc.chaojiying import Chaojiying_Client
 
 
 class LoginBiliBili(object):
@@ -60,6 +61,18 @@ class LoginBiliBili(object):
 
         login_btn_ele.click()
 
+    def orc_image(image_file_path):
+
+        chaojiying = Chaojiying_Client(
+            'xw1294600058', 'xinwang1997', '952057')  # 用户中心>>软件ID 生成一个替换 96001
+
+        im = open(image_file_path,
+                  'rb').read()  # 本地图片文件路径 来替换 a.jpg 有时WIN系统须要//
+
+        res_str = chaojiying.PostPic(im, 9501)
+
+        return res_str
+
     def screenshot_code_img(self):
         # 使用CSS选择器找到验证码容器
         geetest_widget_ele = self.driver.find_element(
@@ -87,8 +100,8 @@ class LoginBiliBili(object):
 
         utils_instance.save_images(
             text_order_screenshot,  self.img_dir_path, ORDER_IMG_NAME)
-        
-        
+
+        code_text_list = self.orc_image(code_img_abs_path)
 
         # 点击ok_btn元素的指定位置
         action = ActionChains(self.driver)
