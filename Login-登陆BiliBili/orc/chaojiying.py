@@ -3,7 +3,6 @@
 
 import requests
 from hashlib import md5
-from config import file_abs_path
 
 
 class Chaojiying_Client(object):
@@ -67,7 +66,8 @@ class Chaojiying_Client(object):
 if __name__ == '__main__':
     chaojiying = Chaojiying_Client(
         'xw1294600058', 'xinwang1997', '952057')  # 用户中心>>软件ID 生成一个替换 96001
-    im = open(file_abs_path, 'rb').read()  # 本地图片文件路径 来替换 a.jpg 有时WIN系统须要//
+    im = open('/Users/xinwang/Desktop/xw/python/python-spider/Login-登陆BiliBili/verification_code/order.png',
+              'rb').read()  # 本地图片文件路径 来替换 a.jpg 有时WIN系统须要//
 
     res_str = chaojiying.PostPic(im, 2002)
 
