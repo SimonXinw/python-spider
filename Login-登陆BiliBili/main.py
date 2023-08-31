@@ -92,6 +92,9 @@ class LoginBiliBili(object):
         code_img_ele = geetest_widget_ele.find_element(
             By.CSS_SELECTOR, '.geetest_item_wrap')
 
+        code_img_click_img = geetest_widget_ele.find_element(
+            By.CSS_SELECTOR, '.geetest_item_img')
+
         ok_btn = geetest_widget_ele.find_element(
             By.CSS_SELECTOR, '.geetest_commit')
 
@@ -114,7 +117,7 @@ class LoginBiliBili(object):
 
         action = ActionChains(self.driver)
 
-        action.move_to_element(code_img_ele)
+        action.move_to_element(code_img_click_img)
 
         for order_index, order_text in enumerate(order_text_list):
             if order_index == 0:
@@ -131,6 +134,8 @@ class LoginBiliBili(object):
                     action.perform()
 
                     break
+
+        ok_btn.click()
 
     def start(self):
         self.driver.get(self.page_url)
