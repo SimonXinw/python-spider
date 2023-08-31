@@ -1,5 +1,6 @@
 import os
 import re
+from PIL import Image
 
 
 class Utils(object):
@@ -32,6 +33,20 @@ class Utils(object):
             file.write(image_file)
 
         print(f"保存 - 图片文件路径：>>> {save_file_path}")
+
+    """ 
+    识别图片的 width, height
+
+    return width, height
+    """
+
+    def get_image_width_and_height(self, image_abs_path):
+        image = Image.open(image_abs_path)
+
+        # 获取图片的宽度和高度
+        image_width, image_height = image.size
+
+        return [image_width, image_height]
 
     def get_first_filename(self, abs_path):
         # 获取源目录下的所有文件和文件夹

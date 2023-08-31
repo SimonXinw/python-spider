@@ -111,6 +111,9 @@ class LoginBiliBili(object):
         utils_instance.save_images(
             text_order_screenshot,  self.img_dir_path, ORDER_IMG_NAME)
 
+        code_img_width, code_img_height = self.utils.get_image_width_and_height(
+            code_img_abs_path)
+
         # code_text_list = self.orc_image(code_img_abs_path)
 
         # order_text_list = self.orc_image(order_img_abs_path)
@@ -130,6 +133,7 @@ class LoginBiliBili(object):
                 time.sleep(1)
 
             time.sleep(2)
+
             for code_text in code_text_list:
                 if (code_text['text'] == order_text['text']):
 
