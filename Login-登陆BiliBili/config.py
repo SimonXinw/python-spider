@@ -20,7 +20,7 @@ current_folder = os.getcwd()
 
 # 获取当前文件夹同级的 output_images 文件夹的绝对路径
 img_dir_path = os.path.abspath(os.path.join(
-    current_folder, 'Login-登陆BiliBili', 'verification_code'))
+    current_folder, 'Login-登陆BiliBili', 'verification_code_img'))
 
 file_name = utils_instance.get_first_filename(img_dir_path)
 
