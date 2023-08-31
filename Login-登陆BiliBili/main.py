@@ -2,19 +2,28 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from config import USER, PAGE_URL, PASSWORD, ORDER_IMG_NAME,  CODE_IMG_NAME
+from selenium.webdriver.common.action_chains import ActionChains
+from config import USER, PAGE_URL, PASSWORD, ORDER_IMG_NAME,  CODE_IMG_NAME, code_img_abs_path, order_img_abs_path
 from utils.common import Utils
+<<<<<<< HEAD
+=======
+from orc.chaojiying import Chaojiying_Client
+>>>>>>> 0cc80d3195bc8a8764d08d5d3289406b360907f9
 from config import img_dir_path
 import time
 
 
-class WebOperator:
-    def __init__(self, base_url, user, password):
-        self.base_url = base_url
+class LoginBiliBili(object):
+    def __init__(self, page_url, user, password, img_dir_path):
+        self.page_url = page_url
 
         self.user = user
 
         self.password = password
+
+        self.img_dir_path = img_dir_path
+
+        self.utils = Utils()
 
         driver_options = webdriver.ChromeOptions()  # 谷歌选项
 
@@ -30,25 +39,7 @@ class WebOperator:
 
         self.wait = WebDriverWait(self.driver, 2)
 
-    def crawling(self):
-        self.driver.get(self.base_url)
-
-        # 等待页面加载完成，设置最长等待时间为 10 秒
-        wait = WebDriverWait(self.driver, 10)
-
-        # 等待元素渲染出来之后取页面 html 数据
-        wait.until(EC.presence_of_element_located(
-            (By.CSS_SELECTOR, '.go-login-btn')))
-
-        #  获取输入框 dom 节点
-        login_btn = self.driver.find_element(By.CSS_SELECTOR, '.go-login-btn')
-
-        login_btn.click()
-
-        # 等待元素渲染出来之后取页面 html 数据
-        wait.until(EC.presence_of_element_located(
-            (By.CLASS_NAME, 'login-pwd-wp')))
-
+    def input_account(self):
         # 找到 form__item 元素
         login_wrap_ele = self.driver.find_element(
             By.CLASS_NAME, 'login-pwd-wp')
@@ -72,23 +63,40 @@ class WebOperator:
 
         password_ele.send_keys(self.password)
 
+        time.sleep(1.5)
+
         login_btn_ele.click()
 
-        wait.until(EC.presence_of_element_located(
-            (By.CSS_SELECTOR, ".geetest_panel:last-child .geetest_panel_box .geetest_panel_next .geetest_widget .geetest_item_img")))
+    def orc_image(self, image_file_path):
 
-        time.sleep(1)
+        chaojiying = Chaojiying_Client(
+            'xw1294600058', 'xinwang1997', '952057')  # 用户中心>>软件ID 生成一个替换 96001
 
-        # 使用CSS选择器找到目标元素
+        im = open(image_file_path,
+                  'rb').read()  # 本地图片文件路径 来替换 a.jpg 有时WIN系统须要//
+
+        res = chaojiying.PostPic(im, 9501)
+
+        res_str = res['pic_str']
+
+        sorted_str = self.utils.sort_text_order(res_str)
+
+        return sorted_str
+
+    def screenshot_code_img(self):
+        # 使用CSS选择器找到验证码容器
         geetest_widget_ele = self.driver.find_element(
             By.CSS_SELECTOR,  '.geetest_panel:last-child .geetest_panel_box .geetest_panel_next .geetest_widget')
 
-        #  这里要改
+        # 分别抓取元素结点
         text_order_ele = code_img_ele = geetest_widget_ele.find_element(
             By.CSS_SELECTOR, '.geetest_tip_img')
 
         code_img_ele = geetest_widget_ele.find_element(
             By.CSS_SELECTOR, '.geetest_item_wrap')
+
+        code_img_click_img = geetest_widget_ele.find_element(
+            By.CSS_SELECTOR, '.geetest_item_img')
 
         ok_btn = geetest_widget_ele.find_element(
             By.CSS_SELECTOR, '.geetest_commit')
@@ -101,14 +109,81 @@ class WebOperator:
         text_order_screenshot = text_order_ele.screenshot_as_png
 
         utils_instance.save_images(
-            code_img_screenshot,  img_dir_path, CODE_IMG_NAME)
+            code_img_screenshot,  self.img_dir_path, CODE_IMG_NAME)
 
         utils_instance.save_images(
-            text_order_screenshot,  img_dir_path, ORDER_IMG_NAME)
+            text_order_screenshot,  self.img_dir_path, ORDER_IMG_NAME)
+
+        # code_text_list = self.orc_image(code_img_abs_path)
+
+        # order_text_list = self.orc_image(order_img_abs_path)
+
+        code_text_list = [{'text': '音', 'x': '1', 'y': '1'}, {
+            'text': '清', 'x': '10', 'y': '10'}, {'text': '茶', 'x': '100', 'y': '100'}]
+
+        order_text_list = [{'text': '清', 'x': '13', 'y': '27'}, {
+            'text': '音', 'x': '40', 'y': '19'}, {'text': '茶', 'x': '67', 'y': '21'}]
+
+        action = ActionChains(self.driver)
+
+        action.move_to_element(code_img_click_img)
+
+        for order_index, order_text in enumerate(order_text_list):
+            if order_index == 0:
+                time.sleep(1)
+
+            time.sleep(2)
+            for code_text in code_text_list:
+                if (code_text['text'] == order_text['text']):
+
+                    action.move_by_offset(code_text['x'], code_text['y'])
+
+                    action.click()
+
+                    action.perform()
+
+                    break
+
+        ok_btn.click()
+
+    def start(self):
+        self.driver.get(self.page_url)
+
+        # 等待 - 页面加载完成，设置最长等待时间为 10 秒
+        wait = WebDriverWait(self.driver, 10)
+
+        # 等待 - 元素渲染出来之后取页面 html 数据
+        wait.until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, '.go-login-btn')))
+
+        #  获取输入框 dom 节点
+        login_btn = self.driver.find_element(By.CSS_SELECTOR, '.go-login-btn')
+
+        login_btn.click()
+
+        # 等待 - 元素渲染出来之后取页面 html 数据
+        wait.until(EC.presence_of_element_located(
+            (By.CLASS_NAME, 'login-pwd-wp')))
+
+        # 登录
+        self.input_account()
+
+        wait.until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, ".geetest_panel:last-child .geetest_panel_box .geetest_panel_next .geetest_widget .geetest_item_img")))
+
+        time.sleep(1.5)
+
+        # 截图
+        self.screenshot_code_img()
 
         self.driver.quit()
 
 
-scraper = WebOperator(PAGE_URL, USER, PASSWORD)
+if __name__ == '__main__':
+    config_dict = {
+        'page_url':  PAGE_URL, 'user': USER, 'password': PASSWORD, 'img_dir_path': img_dir_path
+    }
 
-scraper.crawling()
+    scraper = LoginBiliBili(**config_dict)
+
+    scraper.start()
