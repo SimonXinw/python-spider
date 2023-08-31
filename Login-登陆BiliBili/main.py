@@ -168,7 +168,7 @@ class LoginBiliBili(object):
         wait.until(EC.presence_of_element_located(
             (By.CSS_SELECTOR, ".geetest_panel:last-child .geetest_panel_box .geetest_panel_next .geetest_widget .geetest_item_img")))
 
-        time.sleep(1)
+        time.sleep(1.5)
 
         # 截图
         self.screenshot_code_img()
