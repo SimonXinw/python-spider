@@ -31,3 +31,6 @@ pip uninstall -y Pillowpip install Pillow==9.5.0
 # 2. 超级鹰
 
 https://www.chaojiying.com/api-5.html
+
+# 3.模拟 b 站 按顺序点击验证码
+code  [{'text': '音', 'x': '97', 'y': '229'}, {'text': '清', 'x': '114', 'y': '143'}, {'text': '茶', 'x': '177', 'y': '127'}] order [{'text': '清', 'x': '13', 'y': '27'}, {'text': '音', 'x': '40', 'y': '19'}, {'text': '茶', 'x': '67', 'y': '21'}]

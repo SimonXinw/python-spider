@@ -111,9 +111,15 @@ class LoginBiliBili(object):
         utils_instance.save_images(
             text_order_screenshot,  self.img_dir_path, ORDER_IMG_NAME)
 
-        code_text_list = self.orc_image(code_img_abs_path)
+        # code_text_list = self.orc_image(code_img_abs_path)
 
-        order_text_list = self.orc_image(order_img_abs_path)
+        # order_text_list = self.orc_image(order_img_abs_path)
+
+        code_text_list = [{'text': '音', 'x': '1', 'y': '1'}, {
+            'text': '清', 'x': '10', 'y': '10'}, {'text': '茶', 'x': '100', 'y': '100'}]
+
+        order_text_list = [{'text': '清', 'x': '13', 'y': '27'}, {
+            'text': '音', 'x': '40', 'y': '19'}, {'text': '茶', 'x': '67', 'y': '21'}]
 
         action = ActionChains(self.driver)
 
