@@ -114,15 +114,20 @@ class LoginBiliBili(object):
         action.move_to_element(code_img_ele)
 
         for order_index, order_text in enumerate(order_text_list):
+            if order_index == 0:
+                time.sleep(1)
+
+            time.sleep(2)
             for code_text in code_text_list:
                 if (code_text['text'] == order_text['text']):
-                    # 点击ok_btn元素的指定位置
 
                     action.move_by_offset(code_text['x'], code_text['y'])
 
                     action.click()
 
                     action.perform()
+
+                    break
 
     def start(self):
         self.driver.get(self.page_url)
