@@ -5,10 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from config import USER, PAGE_URL, PASSWORD, ORDER_IMG_NAME,  CODE_IMG_NAME, code_img_abs_path, order_img_abs_path
 from utils.common import Utils
-<<<<<<< HEAD
-=======
 from orc.chaojiying import Chaojiying_Client
->>>>>>> 0cc80d3195bc8a8764d08d5d3289406b360907f9
 from config import img_dir_path
 import time
 
