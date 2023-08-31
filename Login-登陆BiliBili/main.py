@@ -61,6 +61,8 @@ class LoginBiliBili(object):
 
         password_ele.send_keys(self.password)
 
+        time.sleep(1.5)
+
         login_btn_ele.click()
 
     def orc_image(self, image_file_path):
@@ -71,7 +73,9 @@ class LoginBiliBili(object):
         im = open(image_file_path,
                   'rb').read()  # 本地图片文件路径 来替换 a.jpg 有时WIN系统须要//
 
-        res_str = chaojiying.PostPic(im, 9501)
+        res = chaojiying.PostPic(im, 9501)
+
+        res_str = res['pic_str']
 
         sorted_str = self.utils.sort_text_order(res_str)
 
