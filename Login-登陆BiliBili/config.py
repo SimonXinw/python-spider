@@ -6,9 +6,9 @@ utils_instance = common.Utils()
 
 PAGE_URL = 'https://www.bilibili.com/'
 
-USER = 18270515107
+USER = 0
 
-PASSWORD = 'xinwang1997'
+PASSWORD = ''
 
 CODE_IMG_NAME = 'code.png'
 
