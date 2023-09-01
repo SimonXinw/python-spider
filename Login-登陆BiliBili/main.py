@@ -134,11 +134,17 @@ class LoginBiliBili(object):
 
             time.sleep(2)
 
-            for code_text in code_text_list:
+            for code_text_index, code_text in enumerate(code_text_list):
                 if (code_text['text'] == order_text['text']):
-                    x = int(code_text['x']) - (code_img_width / 2)
+                    x = int(code_text['x'])
 
-                    y = int(code_text['y']) - (code_img_height / 2)
+                    y = int(code_text['y'])
+
+                    if code_text_index == 0:
+
+                        x = int(code_text['x']) - (code_img_width / 2)
+
+                        y = int(code_text['y']) - (code_img_height / 2)
 
                     action.move_by_offset(x, y)
 
