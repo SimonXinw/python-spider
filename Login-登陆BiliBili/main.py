@@ -136,8 +136,11 @@ class LoginBiliBili(object):
 
             for code_text in code_text_list:
                 if (code_text['text'] == order_text['text']):
+                    x = code_text['x'] - (code_img_width / 2)
 
-                    action.move_by_offset(code_text['x'], code_text['y'])
+                    y = code_text['y'] - (code_img_height / 2)
+
+                    action.move_by_offset(x, y)
 
                     action.click()
 
