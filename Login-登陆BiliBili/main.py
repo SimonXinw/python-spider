@@ -11,12 +11,18 @@ import time
 
 
 class LoginBiliBili(object):
-    def __init__(self, page_url, user, password, img_dir_path):
+    def __init__(self, page_url, user, password, img_dir_path, chaojiying_user, chaojiying_password, chaojiying_id):
         self.page_url = page_url
 
         self.user = user
 
         self.password = password
+
+        self.chaojiying_user = chaojiying_user
+
+        self.chaojiying_password = chaojiying_password
+
+        self.chaojiying_id = chaojiying_id
 
         self.img_dir_path = img_dir_path
 
@@ -67,7 +73,7 @@ class LoginBiliBili(object):
     def orc_image(self, image_file_path):
 
         chaojiying = Chaojiying_Client(
-            'xw1294600058', 'xinwang1997', '952057')  # 用户中心>>软件ID 生成一个替换 96001
+            self.chaojiying_user, self.chaojiying_password, self.chaojiying_id)  # 用户中心>>软件ID 生成一个替换 96001
 
         im = open(image_file_path,
                   'rb').read()  # 本地图片文件路径 来替换 a.jpg 有时WIN系统须要//
@@ -114,19 +120,23 @@ class LoginBiliBili(object):
         code_img_width, code_img_height = self.utils.get_image_width_and_height(
             code_img_abs_path)
 
-        # code_text_list = self.orc_image(code_img_abs_path)
+        code_text_list = self.orc_image(code_img_abs_path)
 
-        # order_text_list = self.orc_image(order_img_abs_path)
+        order_text_list = self.orc_image(order_img_abs_path)
 
-        code_text_list = [{'text': '音', 'x': '1', 'y': '1'}, {
-            'text': '清', 'x': '10', 'y': '10'}, {'text': '茶', 'x': '100', 'y': '100'}]
+        # code_text_list = [{'text': '音', 'x': '100', 'y': '100'}, {
+        #     'text': '清', 'x': '10', 'y': '10'}, {'text': '茶', 'x': '200', 'y': '200'}]
 
-        order_text_list = [{'text': '清', 'x': '13', 'y': '27'}, {
-            'text': '音', 'x': '40', 'y': '19'}, {'text': '茶', 'x': '67', 'y': '21'}]
+        # order_text_list = [{'text': '清', 'x': '13', 'y': '27'}, {
+        #     'text': '音', 'x': '40', 'y': '19'}, {'text': '茶', 'x': '67', 'y': '21'}]
 
         action = ActionChains(self.driver)
 
         action.move_to_element(code_img_click_img)
+
+        cache_x = (code_img_width / 2)
+
+        cache_y = (code_img_height / 2)
 
         for order_index, order_text in enumerate(order_text_list):
             if order_index == 0:
@@ -134,17 +144,15 @@ class LoginBiliBili(object):
 
             time.sleep(2)
 
-            for code_text_index, code_text in enumerate(code_text_list):
+            for code_text in code_text_list:
                 if (code_text['text'] == order_text['text']):
-                    x = int(code_text['x'])
+                    x = int(code_text['x']) - cache_x
 
-                    y = int(code_text['y'])
+                    y = int(code_text['y']) - cache_y
 
-                    if code_text_index == 0:
+                    cache_x = int(code_text['x'])
 
-                        x = int(code_text['x']) - (code_img_width / 2)
-
-                        y = int(code_text['y']) - (code_img_height / 2)
+                    cache_y = int(code_text['y'])
 
                     action.move_by_offset(x, y)
 
@@ -190,9 +198,20 @@ class LoginBiliBili(object):
 
 
 if __name__ == '__main__':
+
     config_dict = {
         'page_url':  PAGE_URL, 'user': USER, 'password': PASSWORD, 'img_dir_path': img_dir_path
     }
+
+    config_dict['user'] = input("请输入B站账号: ")
+
+    config_dict['password'] = input("请输入B站密码: ")
+
+    config_dict['chaojiying_user'] = input("请输入超级鹰账号: ")
+
+    config_dict['chaojiying_password'] = input("请输入超级鹰密码: ")
+
+    config_dict['chaojiying_id'] = input("请输入超级鹰id: ")
 
     scraper = LoginBiliBili(**config_dict)
 
