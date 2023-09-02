@@ -22,7 +22,9 @@
 
 ## [5.JD 爬取搜索结果页面的商品图片](./JD-搜索结果页图片/README.md)
 
-# git 免输入用户名密码设置
+# PS
+
+## git 免输入用户名密码设置
 
 如果 git push 提示输入用户名密码，先去 github 申请 token
 PS:token 不可以放在仓库里面，github 会自动删除
