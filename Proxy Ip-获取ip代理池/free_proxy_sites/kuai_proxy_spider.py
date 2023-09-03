@@ -1,11 +1,10 @@
 # _*_ coding : utf-8 _*_
-from config import save_file_abs_path
 from lxml import etree
 import time
 import sys
 import requests
 from tqdm import tqdm
-sys.path.append('../')
+import os
 
 
 class SpiderKuai(object):
