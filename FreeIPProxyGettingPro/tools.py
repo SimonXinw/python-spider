@@ -30,7 +30,8 @@ def check_proxy_900cha(proxy, timeout=3, realtimeout=False):
         'https': '{}:{}'.format(proxy['ip'], proxy['port'])
     }
     try:
-        response = requests.get(url=url, headers=headers, proxies=proxies, timeout=timeout)
+        response = requests.get(url=url, headers=headers,
+                                proxies=proxies, timeout=timeout)
     except Exception as e:
         return False, None
     else:
@@ -50,7 +51,7 @@ def get_latest_proxy_file(file_path):
     :param file_path:
     :return:
     """
-    file_latest = sorted(os.listdir(file_path))[-1]
+    file_latest = sorted(os.listdir(file_path))
     with open(os.path.join(file_path, file_latest), 'r', encoding='utf=8') as f:
         all_free_proxies = [json.loads(s.strip()) for s in f.readlines()]
 
@@ -72,4 +73,3 @@ def get_free_proxy():
 if __name__ == '__main__':
     proxy = get_free_proxy()
     print(proxy)
-
