@@ -168,7 +168,7 @@ class LoginBiliBili(object):
         self.driver.get(self.page_url)
 
         # 等待 - 页面加载完成，设置最长等待时间为 10 秒
-        wait = WebDriverWait(self.driver, 10)
+        wait = WebDriverWait(self.driver, 10) 
 
         # 等待 - 元素渲染出来之后取页面 html 数据
         wait.until(EC.presence_of_element_located(

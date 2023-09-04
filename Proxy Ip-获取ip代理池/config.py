@@ -14,7 +14,7 @@ current_folder = os.getcwd()
 save_abs_dir_path = os.path.abspath(os.path.join(
     current_folder, 'Proxy Ip-获取ip代理池', 'proxy_ip_result'))
 
-file_name = 'proxy_ip_result.txt'
+file_name = 'proxy_ip_result.json'
 
 # excel 文件绝对路径 path
 save_file_abs_path = os.path.abspath(

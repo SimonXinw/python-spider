@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from spiders.download import save_images
 from spiders.get_images import get_product_image_links
-from config import SAVE_DIR_PATH, PAGE_URL
+from config import SAVE_DIR_PATH, PAGE_URL 
 
 
 class WebScraper:

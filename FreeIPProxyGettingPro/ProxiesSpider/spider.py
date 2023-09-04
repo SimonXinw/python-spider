@@ -95,7 +95,7 @@ class Spider:
             ))
             print('-' * 90)
             return None
-        except Exception as e:
+        except Exception as e: 
             print('\033[1;31m{}\033[0m'.format(
                 '[{}][{}] | page: {} | e >>> {}'.format(self.proxy_try_num, self.__class__.__name__, self.url, e)
             ))

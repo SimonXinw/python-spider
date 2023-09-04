@@ -2,14 +2,18 @@
 from lxml import etree
 import time
 import requests
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 
 
-class SpiderKuai(object):
+class SpiderSeo(object):
 
-    def __init__(self, save_file_abs_path, retry_num=None):
+    def __init__(self):
         self.name = __class__.__name__
 
-        self.url = 'https://www.kuaidaili.com/free/inha/1/'
+        self.base_url = 'https://proxy.seofangfa.com/'
 
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
@@ -22,23 +26,23 @@ class SpiderKuai(object):
 
         self.all_proxies = []
 
-        self.retry_num =  retry_num or 3
+        self.retry_count = 1
 
-        self.retry_count =  1
+        driver_options = webdriver.ChromeOptions()  # 谷歌选项
 
-        self.save_file_abs_path = save_file_abs_path
+        # 设置为开发者模式，避免被识别
+        driver_options.add_experimental_option('excludeSwitches',
+                                               ['enable-automation'])
 
-    def pre_parse(self):
-        self.parse_urls = [
-            'https://www.kuaidaili.com/free/inha/1/'      # 国内高匿代理
-        ]
-        return self.parse_urls
+        self.driver = webdriver.Chrome(options=driver_options)
+
+        self.wait = WebDriverWait(self.driver, 2)
 
     def parse(self):
         """
         解析代理
         """
-        content = self.response.text
+        content = self.page_source
 
         tree = etree.HTML(content)
 
@@ -61,11 +65,30 @@ class SpiderKuai(object):
 
         return proxy_list
 
+    def parse(self):
+        """
+        解析代理
+        """
+        content = self.page_source
+
+        tree = etree.HTML(content)
+        proxies_obj = tree.xpath('//table[@class="table"]/tbody/tr')
+        proxies = []
+        for proxy_obj in proxies_obj:
+            dic_ = {
+                'ip': proxy_obj.xpath('./td[1]/text()')[0].strip(),
+                'port': proxy_obj.xpath('./td[2]/text()')[0].strip(),
+                'position': proxy_obj.xpath('./td[4]/text()')[0].strip(),
+                'day': proxy_obj.xpath('./td[5]/text()')[0].strip().split(' ')[0],
+            }
+            proxies.append(dic_)
+        return proxies
+
     def get_response(self):
         try:
             self.response = requests.get(
                 self.url, headers=self.headers, timeout=self.timeout)
-            
+
         except Exception as e:
             #  请求限制边界
             if self.retry_count >= self.retry_num:
@@ -73,41 +96,14 @@ class SpiderKuai(object):
 
                 return
 
-               
-            print(f'Error: 第 {self.retry_count} 次请求失败: 5 秒后进行第 {self.retry_count + 1} 次请求')
+            print(
+                f'Error: 第 {self.retry_count} 次请求失败: 5 秒后进行第 {self.retry_count + 1} 次请求')
 
             self.retry_count += 1
-            
+
             time.sleep(5)
 
             self.get_response()
-
-
-    def get_all_proxies(self):
-        """
-        获取所有 proxies
-        """
-        # 1 先获取所有待采集的 proxy list 页
-        parse_urls = self.pre_parse()
-
-
-        # 2 对每个 proxy 信息页的资源进行解析
-        for index, parse_url in enumerate(parse_urls):
-            self.url = parse_url
-
-            # 第一次不等待
-            if index != 0:
-                time.sleep(3)
-            
-            # self.update_attrs(url=parse_url)
-            self.get_response()
-
-            proxies = self.parse()
-            
-            self.all_proxies += proxies
-
-        return self.all_proxies
-
 
     def run(self):
         """
@@ -115,20 +111,31 @@ class SpiderKuai(object):
             init -> face page url request -> (resource page collect) -> crawl all proxies -> check proxies' useability -> save
         :return:
         """
+        self.driver.get(self.base_url)
 
-        # 1 爬取所有 proxies
-        self.all_proxies = self.get_all_proxies()
+        # 等待 - 页面加载完成，设置最长等待时间为 10 秒
+        wait = WebDriverWait(self.driver, 10)
+
+        # 等待 - 元素渲染出来之后取页面 html 数据
+        wait.until(EC.presence_of_element_located(
+            (By.CLASS_NAME, "table-responsive")))
+
+        self.page_source = self.driver.page_source
+
+        #  分析提取 proxy
+        proxies = self.parse()
+
+        self.all_proxies += proxies
+
+        self.driver.quit()
 
         print('[{}] 爬取代理数：{}'.format(
             self.__class__.__name__, len(self.all_proxies)))
-        
-        return  self.all_proxies
 
+        return self.all_proxies
 
 
 if __name__ == '__main__':
-    config = {
-        save_file_abs_path: save_file_abs_path
-    }
-    spider_kuai = SpiderKuai(**config)
-    spider_kuai.run()
+    instance = SpiderSeo()
+
+    instance.run()
