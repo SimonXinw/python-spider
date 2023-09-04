@@ -4,15 +4,9 @@ from utils import common
 
 utils_instance = common.Utils()
 
-PAGE_URL = 'https://www.bilibili.com/'
+PAGE_URL = 'https://www.zhipin.com/web/geek/job?query=%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88&city=101280600'
 
-USER = 0
-
-PASSWORD = ''
-
-CODE_IMG_NAME = 'code.png'
-
-ORDER_IMG_NAME = 'order.png'
+SEARCH_QUERY = '前端工程师'
 
 
 # 获取当前文件夹的绝对路径
@@ -27,17 +21,3 @@ file_name = utils_instance.get_first_filename(img_dir_path)
 # excel 文件绝对路径 path
 file_abs_path = os.path.abspath(
     os.path.join(img_dir_path, file_name))
-
-# 验证码文件绝对路径 path
-code_img_abs_path = os.path.abspath(
-    os.path.join(img_dir_path, CODE_IMG_NAME))
-
-# 验证码的顺序文件绝对路径 path
-order_img_abs_path = os.path.abspath(
-    os.path.join(img_dir_path, ORDER_IMG_NAME))
-
-
-# 网站 URL
-PAGE_URL = 'https://www.bilibili.com/'
-
-COOKIES = ''
