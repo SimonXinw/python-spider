@@ -1,27 +1,26 @@
 # _*_ coding : utf-8 _*_
-from lxml import etree
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 from urllib.parse import urlencode
-from config import PAGE_URL, CITY_CODE, SEARCH_QUERY, file_abs_path
+from config import PAGE_URL, CITY_CODE, SEARCH_QUERY, file_abs_path, PROXY_DICT
 import time
-import requests
+import random
 import csv
 import os
 
 
 class BossSpider(object):
 
-    def __init__(self, page_url, city, query, save_file_abs_path):
+    def __init__(self, page_url, city, query, save_file_abs_path, proxy_dict, search_text):
         self.name = __class__.__name__
 
         # 使用urlencode()将参数编码为URL查询字符串
         params_str = urlencode({'query': query, 'city': city}, safe='')
 
-        self.base_url = page_url + '?' + params_str
+        self.base_url = page_url
 
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
@@ -32,6 +31,10 @@ class BossSpider(object):
 
         self.timeout = 3
 
+        self.proxy_dict = proxy_dict
+
+        self.search_text = search_text
+
         self.page = 1
 
         self.save_file_abs_path = save_file_abs_path
@@ -40,13 +43,15 @@ class BossSpider(object):
 
         self.retry_count = 1
 
-        driver_options = webdriver.ChromeOptions()  # 谷歌选项
+        chrome_options = webdriver.ChromeOptions()  # 谷歌选项
 
         # 设置为开发者模式，避免被识别
-        driver_options.add_experimental_option('excludeSwitches',
+        chrome_options.add_experimental_option('excludeSwitches',
                                                ['enable-automation'])
+        chrome_options.add_argument(
+            '--proxy-server={}:{}'.format(self.proxy_dict['ip'], self.proxy_dict['port']))
 
-        self.driver = webdriver.Chrome(options=driver_options)
+        self.driver = webdriver.Chrome(options=chrome_options)
 
         self.wait = WebDriverWait(self.driver, 2)
 
@@ -67,17 +72,21 @@ class BossSpider(object):
 
             writer.writerows(table_header)
 
-        print(f"创建成功: 数据已成功写入 => {self.save_file_abs_path}")
+        print(f"创建成功: 数据写入路径 => {self.save_file_abs_path}")
 
     def crawling(self):
-        # 等待 - 页面加载完成，设置最长等待时间为 10 秒
-        wait = WebDriverWait(self.driver, 10)
+        if self.page > 10:
+            return
 
         # 等待 - 元素渲染出来之后取页面 html 数据
-        wait.until(EC.presence_of_element_located(
+        self.wait.until(EC.presence_of_element_located(
             (By.CLASS_NAME, "search-job-result")))
 
-        time.sleep(2)
+        # 生成随机等待时间
+        wait_time = random.uniform(2, 5)
+
+        # 等待随机时间
+        time.sleep(wait_time)
 
         self.page_source = self.driver.page_source
 
@@ -87,8 +96,6 @@ class BossSpider(object):
         self.save_to_csv()
 
         self.page = self.page + 1
-
-        time.sleep(2)
 
         # 查找具有空类名的<a>标签
         a_eles = self.driver.find_elements(
@@ -100,7 +107,7 @@ class BossSpider(object):
             if str(self.page) == page_size:
                 a_ele.click()
 
-                return
+                break
 
         self.crawling()
 
@@ -179,7 +186,18 @@ class BossSpider(object):
 
             writer.writerows(self.job_data_list)
 
-            print(f'追加成功: 数量 {len(self.job_data_list)}')
+        # 打开CSV文件
+        with open(self.save_file_abs_path, 'r') as file:
+            # 创建CSV读取器
+            csv_reader = csv.reader(file)
+
+            # 计算行数
+            row_count = sum(1 for row in csv_reader)
+
+            # 打印行数
+            print()
+
+            print(f'保存成功: {len(self.job_data_list)} 条, Total: {row_count}')
 
     def run(self):
         """
@@ -190,7 +208,30 @@ class BossSpider(object):
         #  创建一个 csv 表
         self.create_csv()
 
+        # 打开注释 测试代理是否成功
+        # self.driver.get('https://ip.900cha.com/')
+        # 加上断点调试
+
         self.driver.get(self.base_url)
+
+        # 等待 - 页面加载完成，设置最长等待时间为 10 秒
+        self.wait = WebDriverWait(self.driver, 16)
+
+        # 等待 - 元素渲染出来之后取页面 html 数据
+        self.wait.until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, ".search-panel-new .search-box .ipt-search")))
+
+        search_ele = self.driver.find_element(
+            By.CSS_SELECTOR, '.search-panel-new .search-box .ipt-search')
+
+        search_ele.clear()
+
+        search_ele.send_keys(self.search_text)
+
+        search_btn_ele = self.driver.find_element(
+            By.CSS_SELECTOR, '.search-panel-new .search-box .btn-search')
+
+        search_btn_ele.click()
 
         self.crawling()
 
@@ -202,7 +243,9 @@ if __name__ == '__main__':
         "page_url": PAGE_URL,
         "city": CITY_CODE,
         "query": SEARCH_QUERY,
-        "save_file_abs_path": file_abs_path
+        "save_file_abs_path": file_abs_path,
+        "proxy_dict": PROXY_DICT,
+        "search_text": '前端工程师'
     }
 
     instance = BossSpider(**config_params)

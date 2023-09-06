@@ -8,10 +8,15 @@ SEARCH_QUERY = '前端工程师'
 
 CITY_CODE = '101280600'
 
-PAGE_URL = 'https://www.zhipin.com/web/geek/job'
+PAGE_URL = 'https://www.zhipin.com/shenzhen/'
 
 FILE_NAME = 'data.csv'
 
+# 设置代理IP和端口
+PROXY_DICT = {
+    "ip": '49.234.210.170',
+    "port": '3128'
+}
 
 # 获取当前文件夹的绝对路径
 current_folder = os.getcwd()
