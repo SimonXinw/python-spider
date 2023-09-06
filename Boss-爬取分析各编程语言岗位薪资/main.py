@@ -62,7 +62,7 @@ class BossSpider(object):
                 "福利待遇", "详情链接"]
         ]
 
-        with open(self.save_file_abs_path, "w", encoding="utf-8", newline="") as file:
+        with open(self.save_file_abs_path, "w", encoding='utf-8-sig', newline="") as file:
             writer = csv.writer(file)
 
             writer.writerows(table_header)
