@@ -1,7 +1,4 @@
 from openpyxl import load_workbook
-from openpyxl import Workbook
-from openpyxl.utils.dataframe import dataframe_to_rows
-import pandas as pd
 
 
 def copy_arrange_data():

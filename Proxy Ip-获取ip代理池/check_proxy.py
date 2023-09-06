@@ -83,5 +83,7 @@ class CheckProxy(list):
 if __name__ == '__main__':
     instance = CheckProxy()
 
-    # instance.check_proxy_900cha({"ip": '120.205.70.102', 'port': '8060'})
-    instance.multiple_check([{"ip": '183.238.118.35', 'port': '9999'}])
+    # 想单独测试 ip 和端口可以直接修改这里，然后再执行
+    instance.check_proxy_900cha({"ip": '49.234.210.170', 'port': '3128'})
+
+    # instance.multiple_check([{"ip": '49.234.210.170', 'port': '3128'}])
