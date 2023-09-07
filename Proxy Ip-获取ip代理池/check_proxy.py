@@ -26,9 +26,13 @@ class CheckProxy(list):
         }
 
         proxies = {
-            'http': 'http://{}:{}@{}:{}'.format(proxy['user'], proxy['password'], proxy['ip'], proxy['port']),
-            'http': 'https://{}:{}@{}:{}'.format(proxy['user'], proxy['password'], proxy['ip'], proxy['port']),
+            'http': '{}:{}'.format(proxy['ip'], proxy['port']),
+            'https': '{}:{}'.format(proxy['ip'], proxy['port']),
         }
+        # proxies = {
+        #     'http': 'http://{}:{}@{}:{}'.format(proxy['user'], proxy['password'], proxy['ip'], proxy['port']),
+        #     'https': 'https://{}:{}@{}:{}'.format(proxy['user'], proxy['password'], proxy['ip'], proxy['port']),
+        # }
 
         try:
             response = requests.get(url=url, headers=headers,
@@ -49,7 +53,8 @@ class CheckProxy(list):
             return proxy
 
         except Exception as e:
-            print(f'Request Error: {proxy["ip"]}:{proxy["port"]} 无效x ')
+            print(
+                f'Request Error: {proxy["user"]}:{proxy["password"]}@{proxy["ip"]}:{proxy["port"]} 无效x ')
 
             return False
 
@@ -85,6 +90,6 @@ if __name__ == '__main__':
 
     # 想单独测试 ip 和端口可以直接修改这里，然后再执行
     instance.check_proxy_900cha(
-        {"ip": '49.234.210.170', 'port': '16666', 'user': 'xinwang', 'password': 'xinwang1997'})
+        {"ip": '49.234.210.170', 'port': '3128', 'user': 'simon', 'password': 'xinwang'})
 
     # instance.multiple_check([{"ip": '49.234.210.170', 'port': '3128'}])
