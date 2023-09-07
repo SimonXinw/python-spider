@@ -15,7 +15,9 @@ FILE_NAME = 'data.csv'
 # 设置代理IP和端口
 PROXY_DICT = {
     "ip": '49.234.210.170',
-    "port": '3128'
+    "port": '16666',
+    "user": 'xinwang',
+    "password": 'xinwang1997'
 }
 
 # 获取当前文件夹的绝对路径

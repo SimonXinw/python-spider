@@ -26,8 +26,8 @@ class CheckProxy(list):
         }
 
         proxies = {
-            'http': '{}:{}'.format(proxy['ip'], proxy['port']),
-            'https': '{}:{}'.format(proxy['ip'], proxy['port'])
+            'http': 'http://{}:{}@{}:{}'.format(proxy['user'], proxy['password'], proxy['ip'], proxy['port']),
+            'http': 'https://{}:{}@{}:{}'.format(proxy['user'], proxy['password'], proxy['ip'], proxy['port']),
         }
 
         try:
@@ -40,11 +40,11 @@ class CheckProxy(list):
                 '//h3[@class="text-danger mt-2"]')[0].text.strip()
 
             # 无效
-            if res_ip != proxies['http'].split(':')[0]:
-                return False
+            if res_ip != proxy["ip"]:
+                return print(f'代理失败: 使用的是本机 ip => {res_ip}')
 
             # 有效
-            print(f'代理 IP: {proxy["ip"]}:{proxy["port"]} 有效！')
+            print(f'代理成功: {proxy["ip"]}:{proxy["port"]} 有效！')
 
             return proxy
 
@@ -84,6 +84,7 @@ if __name__ == '__main__':
     instance = CheckProxy()
 
     # 想单独测试 ip 和端口可以直接修改这里，然后再执行
-    instance.check_proxy_900cha({"ip": '49.234.210.170', 'port': '3128'})
+    instance.check_proxy_900cha(
+        {"ip": '49.234.210.170', 'port': '16666', 'user': 'xinwang', 'password': 'xinwang1997'})
 
     # instance.multiple_check([{"ip": '49.234.210.170', 'port': '3128'}])

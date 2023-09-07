@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.proxy import Proxy, ProxyType
 from bs4 import BeautifulSoup
 from urllib.parse import urlencode
 from config import PAGE_URL, CITY_CODE, SEARCH_QUERY, file_abs_path, PROXY_DICT
@@ -43,13 +44,22 @@ class BossSpider(object):
 
         self.retry_count = 1
 
+        proxy = Proxy()
+
+        proxy.proxy_type = ProxyType.MANUAL
+
+        proxy.http_proxy = f'{self.proxy_dict["user"]}:{self.proxy_dict["password"]}@{self.proxy_dict["ip"]}:{self.proxy_dict["port"]}'
+
+        proxy.ssl_proxy = f'{self.proxy_dict["user"]}:{self.proxy_dict["password"]}@{self.proxy_dict["ip"]}:{self.proxy_dict["port"]}'
+
         chrome_options = webdriver.ChromeOptions()  # 谷歌选项
 
         # 设置为开发者模式，避免被识别
         chrome_options.add_experimental_option('excludeSwitches',
                                                ['enable-automation'])
+
         chrome_options.add_argument(
-            '--proxy-server={}:{}'.format(self.proxy_dict['ip'], self.proxy_dict['port']))
+            '--proxy-server=http://{}'.format(proxy.http_proxy))
 
         self.driver = webdriver.Chrome(options=chrome_options)
 
@@ -209,10 +219,10 @@ class BossSpider(object):
         self.create_csv()
 
         # 打开注释 测试代理是否成功
-        # self.driver.get('https://ip.900cha.com/')
+        self.driver.get('https://ip.900cha.com/')
         # 加上断点调试
 
-        self.driver.get(self.base_url)
+        # self.driver.get(self.base_url)
 
         # 等待 - 页面加载完成，设置最长等待时间为 10 秒
         self.wait = WebDriverWait(self.driver, 16)
