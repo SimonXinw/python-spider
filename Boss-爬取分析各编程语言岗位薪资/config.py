@@ -12,11 +12,13 @@ PAGE_URL = 'https://www.zhipin.com/shenzhen/'
 
 FILE_NAME = 'data.csv'
 
+PLUGIN_NAME = 'chrome_proxyauth_plugin.zip'
+
 # 设置代理IP和端口
 PROXY_DICT = {
     "ip": '49.234.210.170',
-    "port": '3128',
-    "user": 'simon',
+    "port": '16666',
+    "user": 'xw',
     "password": 'xinwang'
 }
 
@@ -30,3 +32,10 @@ dir_path = os.path.abspath(os.path.join(
 # excel 文件绝对路径 path
 file_abs_path = os.path.abspath(
     os.path.join(dir_path, FILE_NAME))
+
+# 插件文件路径
+plugin_abs_path = os.path.abspath(os.path.join(
+    current_folder, 'Boss-爬取分析各编程语言岗位薪资', PLUGIN_NAME))
+
+# end
+END = ''

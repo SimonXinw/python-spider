@@ -25,14 +25,14 @@ class CheckProxy(list):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
         }
 
-        proxies = {
-            'http': '{}:{}'.format(proxy['ip'], proxy['port']),
-            'https': '{}:{}'.format(proxy['ip'], proxy['port']),
-        }
         # proxies = {
-        #     'http': 'http://{}:{}@{}:{}'.format(proxy['user'], proxy['password'], proxy['ip'], proxy['port']),
-        #     'https': 'https://{}:{}@{}:{}'.format(proxy['user'], proxy['password'], proxy['ip'], proxy['port']),
+        #     'http': '{}:{}'.format(proxy['ip'], proxy['port']),
+        #     'https': '{}:{}'.format(proxy['ip'], proxy['port']),
         # }
+        proxies = {
+            'http': 'http://{}:{}@{}:{}'.format(proxy['user'], proxy['password'], proxy['ip'], proxy['port']),
+            'https': 'http://{}:{}@{}:{}'.format(proxy['user'], proxy['password'], proxy['ip'], proxy['port']),
+        }
 
         try:
             response = requests.get(url=url, headers=headers,
@@ -90,6 +90,6 @@ if __name__ == '__main__':
 
     # 想单独测试 ip 和端口可以直接修改这里，然后再执行
     instance.check_proxy_900cha(
-        {"ip": '49.234.210.170', 'port': '3128', 'user': 'simon', 'password': 'xinwang'})
+        {"ip": '49.234.210.170', 'port': '16666', 'user': 'xw', 'password': 'xinwang'})
 
     # instance.multiple_check([{"ip": '49.234.210.170', 'port': '3128'}])

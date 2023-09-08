@@ -4,9 +4,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.proxy import Proxy, ProxyType
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 from urllib.parse import urlencode
-from config import PAGE_URL, CITY_CODE, SEARCH_QUERY, file_abs_path, PROXY_DICT
+from chrome_proxy_extension import create_proxy_auth_extension
+from config import PAGE_URL, CITY_CODE, SEARCH_QUERY, file_abs_path, PROXY_DICT, plugin_abs_path
 import time
 import random
 import csv
@@ -44,24 +46,21 @@ class BossSpider(object):
 
         self.retry_count = 1
 
-        proxy = Proxy()
+        proxy_plugin_dict = {'proxy_host': self.proxy_dict['ip'], 'proxy_port': self.proxy_dict['port'], 'proxy_username': self.proxy_dict['user'], 'proxy_password': self.proxy_dict['password'], 'scheme': 'http', 'plugin_path': plugin_abs_path
+                             }
 
-        proxy.proxy_type = ProxyType.MANUAL
+        # 谷歌选项
+        chrome_options = webdriver.ChromeOptions()
 
-        proxy.http_proxy = f'{self.proxy_dict["user"]}:{self.proxy_dict["password"]}@{self.proxy_dict["ip"]}:{self.proxy_dict["port"]}'
-
-        proxy.ssl_proxy = f'{self.proxy_dict["user"]}:{self.proxy_dict["password"]}@{self.proxy_dict["ip"]}:{self.proxy_dict["port"]}'
-
-        chrome_options = webdriver.ChromeOptions()  # 谷歌选项
+        chrome_options.add_extension(
+            create_proxy_auth_extension(**proxy_plugin_dict))
 
         # 设置为开发者模式，避免被识别
         chrome_options.add_experimental_option('excludeSwitches',
                                                ['enable-automation'])
 
-        chrome_options.add_argument(
-            '--proxy-server=http://{}'.format(proxy.http_proxy))
-
-        self.driver = webdriver.Chrome(options=chrome_options)
+        self.driver = webdriver.Chrome(
+            options=chrome_options)
 
         self.wait = WebDriverWait(self.driver, 2)
 
