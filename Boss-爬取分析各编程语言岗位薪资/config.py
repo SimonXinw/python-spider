@@ -12,7 +12,7 @@ PAGE_URL = 'https://www.zhipin.com/shenzhen/'
 
 FILE_NAME = 'data.csv'
 
-PLUGIN_NAME = 'chrome_proxyauth_plugin.zip'
+PLUGIN_NAME = 'plugin.zip'
 
 # 设置代理IP和端口
 PROXY_DICT = {
@@ -35,7 +35,7 @@ file_abs_path = os.path.abspath(
 
 # 插件文件路径
 plugin_abs_path = os.path.abspath(os.path.join(
-    current_folder, 'Boss-爬取分析各编程语言岗位薪资', PLUGIN_NAME))
+    current_folder, 'Boss-爬取分析各编程语言岗位薪资', 'chrome_proxy_extension', PLUGIN_NAME))
 
 # end
 END = ''
