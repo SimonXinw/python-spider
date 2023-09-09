@@ -14,6 +14,8 @@ FILE_NAME = 'data.csv'
 
 PLUGIN_NAME = 'plugin.zip'
 
+COUNT_NAME = 'count.json'
+
 # 设置代理IP和端口
 PROXY_DICT = {
     "ip": '49.234.210.170',
@@ -36,6 +38,10 @@ file_abs_path = os.path.abspath(
 # 插件文件路径
 plugin_abs_path = os.path.abspath(os.path.join(
     current_folder, 'Boss-爬取分析各编程语言岗位薪资', 'chrome_proxy_extension', PLUGIN_NAME))
+
+# 统计文件路径
+count_abs_path = os.path.abspath(os.path.join(
+    current_folder, 'Boss-爬取分析各编程语言岗位薪资', COUNT_NAME))
 
 # end
 END = ''

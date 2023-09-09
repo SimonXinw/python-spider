@@ -3,21 +3,20 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.proxy import Proxy, ProxyType
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 from urllib.parse import urlencode
 from chrome_proxy_extension import create_proxy_auth_extension
-from config import PAGE_URL, CITY_CODE, SEARCH_QUERY, file_abs_path, PROXY_DICT, plugin_abs_path
+from config import PAGE_URL, CITY_CODE, SEARCH_QUERY, file_abs_path, PROXY_DICT, plugin_abs_path, count_abs_path
 import time
 import random
 import csv
 import os
+import json
 
 
 class BossSpider(object):
 
-    def __init__(self, page_url, city, query, save_file_abs_path, proxy_dict, search_text):
+    def __init__(self, page_url, city, query, save_file_abs_path, proxy_dict, search_text, count_abs_path):
         self.name = __class__.__name__
 
         # 使用urlencode()将参数编码为URL查询字符串
@@ -43,6 +42,8 @@ class BossSpider(object):
         self.save_file_abs_path = save_file_abs_path
 
         self.all_proxies = []
+
+        self.count_abs_path = count_abs_path
 
         self.retry_count = 1
 
@@ -83,42 +84,78 @@ class BossSpider(object):
 
         print(f"创建成功: 数据写入路径 => {self.save_file_abs_path}")
 
+    def get_count(self, key):
+        with open(self.count_abs_path, 'r') as file:
+            count_json = json.load(file)
+
+            return count_json[key]
+
+    def add_count(self, key, page):
+        # 将数字保存到JSON文件中
+        with open(self.count_abs_path, 'w') as file:
+            json.dump({key: page}, file)
+
     def crawling(self):
-        if self.page > 10:
-            return
+        try:
+            # 从JSON文件中读取数字
 
-        # 等待 - 元素渲染出来之后取页面 html 数据
-        self.wait.until(EC.presence_of_element_located(
-            (By.CLASS_NAME, "search-job-result")))
+            self.page = self.get_count('start_page')
 
-        # 生成随机等待时间
-        wait_time = random.uniform(2, 5)
+            if self.page > 10:
+                return
 
-        # 等待随机时间
-        time.sleep(wait_time)
+            # 等待 - 元素渲染出来之后取页面 html 数据
+            self.wait.until(EC.presence_of_element_located(
+                (By.CLASS_NAME, "search-job-result")))
 
-        self.page_source = self.driver.page_source
+            # 生成随机等待时间
+            wait_time = random.uniform(2, 6)
 
-        self.parse()
+            # 等待随机时间
+            time.sleep(wait_time)
 
-        # 保存 csv
-        self.save_to_csv()
+            if self.page > 1:
+             # 查找具有空类名的<a>标签
+                a_eles = self.driver.find_elements(
+                    By.XPATH, '//*[@class="pagination-area"]//a')
 
-        self.page = self.page + 1
+                for a_ele in a_eles:
+                    page_size = a_ele.text.strip()
 
-        # 查找具有空类名的<a>标签
-        a_eles = self.driver.find_elements(
-            By.XPATH, '//*[@class="pagination-area"]//a')
+                    if str(self.page) == page_size:
+                        a_ele.click()
 
-        for a_ele in a_eles:
-            page_size = a_ele.text.strip()
+                        break
 
-            if str(self.page) == page_size:
-                a_ele.click()
+            self.page_source = self.driver.page_source
 
-                break
+            self.parse()
 
-        self.crawling()
+            # 保存 csv
+            self.save_to_csv()
+
+            self.page += self.page + 1
+
+            self.add_count('start_page',  self.page + 1)
+
+            # 查找具有空类名的<a>标签
+            a_eles = self.driver.find_elements(
+                By.XPATH, '//*[@class="pagination-area"]//a')
+
+            for a_ele in a_eles:
+                page_size = a_ele.text.strip()
+
+                if str(self.page) == page_size:
+                    a_ele.click()
+
+                    break
+
+            self.crawling()
+        except Exception as e:
+            # 将数字保存到JSON文件中
+            self.add_count('start_page',  self.page)
+
+            raise BufferError(e)
 
     def parse(self):
         # 使用BeautifulSoup解析HTML内容
@@ -206,7 +243,8 @@ class BossSpider(object):
             # 打印行数
             print()
 
-            print(f'保存成功: {len(self.job_data_list)} 条, Total: {row_count}')
+            print(
+                f'保存成功: 第 {self.page} 页 {len(self.job_data_list)} 条, Total: {row_count}')
 
     def run(self):
         """
@@ -218,10 +256,10 @@ class BossSpider(object):
         self.create_csv()
 
         # 打开注释 测试代理是否成功
-        self.driver.get('https://ip.900cha.com/')
+        # self.driver.get('https://ip.900cha.com/')
         # 加上断点调试
 
-        # self.driver.get(self.base_url)
+        self.driver.get(self.base_url)
 
         # 等待 - 页面加载完成，设置最长等待时间为 10 秒
         self.wait = WebDriverWait(self.driver, 16)
@@ -254,7 +292,8 @@ if __name__ == '__main__':
         "query": SEARCH_QUERY,
         "save_file_abs_path": file_abs_path,
         "proxy_dict": PROXY_DICT,
-        "search_text": '前端工程师'
+        "search_text": '前端工程师',
+        "count_abs_path": count_abs_path,
     }
 
     instance = BossSpider(**config_params)
