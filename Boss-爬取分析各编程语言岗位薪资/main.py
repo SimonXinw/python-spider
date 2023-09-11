@@ -98,9 +98,6 @@ class BossSpider(object):
     def crawling(self):
         try:
             # 从JSON文件中读取数字
-
-            self.page = self.get_count('start_page')
-
             if self.page > 10:
                 return
 
@@ -114,7 +111,7 @@ class BossSpider(object):
             # 等待随机时间
             time.sleep(wait_time)
 
-            if self.page > 1:
+            if self.page > 1 and self.page == self.start_page:
              # 查找具有空类名的<a>标签
                 a_eles = self.driver.find_elements(
                     By.XPATH, '//*[@class="pagination-area"]//a')
@@ -136,8 +133,6 @@ class BossSpider(object):
 
             self.page += self.page + 1
 
-            self.add_count('start_page',  self.page + 1)
-
             # 查找具有空类名的<a>标签
             a_eles = self.driver.find_elements(
                 By.XPATH, '//*[@class="pagination-area"]//a')
@@ -147,6 +142,10 @@ class BossSpider(object):
 
                 if str(self.page) == page_size:
                     a_ele.click()
+
+                    # 等待 - 元素渲染出来之后取页面 html 数据
+                    self.wait.until(EC.presence_of_element_located(
+                        (By.CLASS_NAME, "search-job-result")))
 
                     break
 
@@ -279,6 +278,10 @@ class BossSpider(object):
             By.CSS_SELECTOR, '.search-panel-new .search-box .btn-search')
 
         search_btn_ele.click()
+
+        self.page = self.get_count('start_page')
+
+        self.start_page = self.get_count('start_page')
 
         self.crawling()
 
