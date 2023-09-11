@@ -90,6 +90,6 @@ if __name__ == '__main__':
 
     # 想单独测试 ip 和端口可以直接修改这里，然后再执行
     instance.check_proxy_900cha(
-        {"ip": '49.234.210.170', 'port': '16666', 'user': 'xw', 'password': 'xinwang'})
+        {"ip": '49.234.210.170', 'port': '10000', 'user': 'xw', 'password': 'xinwang'})
 
     # instance.multiple_check([{"ip": '49.234.210.170', 'port': '3128'}])

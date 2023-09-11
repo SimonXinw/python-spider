@@ -19,7 +19,7 @@ COUNT_NAME = 'count.json'
 # 设置代理IP和端口
 PROXY_DICT = {
     "ip": '49.234.210.170',
-    "port": '16666',
+    "port": '10000',
     "user": 'xw',
     "password": 'xinwang'
 }
