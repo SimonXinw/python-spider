@@ -12,15 +12,19 @@
 
 # 每个项目的同级都有对应的 README.md 文件，请到对应项目文件下查看，这里列出目录
 
-## [1.git 上传下载太慢解决配置 hosts 文件](./IP-获取域名对应的IP/README.md)
+## [1.Socket 获取域名 ip 解决 github 太慢](./IP-获取域名对应的IP/README.md)
 
-## [2.boss 直聘抓取分析前端、测试、各编程语言岗位薪资](./Boss-爬取分析各编程语言岗位薪资/README.md)
+## [2.Boss 直聘抓取分析前端、测试、各编程语言岗位薪资](./Boss-爬取分析各编程语言岗位薪资/README.md)
 
-## [3.excel 文件数据处理分析](./Excel-处理转化/README.md)
+## [3.Excel 文件数据处理分析](./Excel-处理转化/README.md)
 
-## [4.B 站自动识别验证码登陆](./BliBli-自动识别验证码登陆/README.md)
+## [4.BiliBili 站自动识别验证码登陆](./BliBli-自动识别验证码登陆/README.md)
 
 ## [5.JD 爬取搜索结果页面的商品图片](./JD-搜索结果页图片/README.md)
+
+## [6.Picture 下载固定尺寸壁纸](./BiZhi-下载固定尺寸壁纸/)
+
+## [7.IP 池，获取清洗 ip](./Proxy%20Ip-获取ip代理池/README.md)
 
 # PS
 
