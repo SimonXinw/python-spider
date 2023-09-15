@@ -21,7 +21,7 @@ PROXY_DICT = {
     "ip": '49.234.210.170',
     "port": '10000',
     "user": 'xw',
-    "password": 'xinwang'
+    "password": ''
 }
 
 # 获取当前文件夹的绝对路径
